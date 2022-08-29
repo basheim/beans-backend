@@ -1,10 +1,9 @@
 package com.beandon.backend.controllers;
 
+import com.beandon.backend.pojo.Plant;
 import com.beandon.backend.services.ForageleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +16,17 @@ public class ForageleController {
     private final ForageleService forageleService;
 
     @GetMapping("/plants")
-    public List<Map<String, Object>> getAllPlants() {
+    public List<Plant> getAllPlants() {
         return forageleService.getAllPlants();
+    }
+
+    @GetMapping("/plants/{id}")
+    public Plant getPlant(@PathVariable("id") String id) {
+        return forageleService.getPlant(id);
+    }
+
+    @PostMapping("/plants")
+    public void importPlant(@RequestBody Plant plant) {
+        forageleService.writePlant(plant);
     }
 }
