@@ -1,0 +1,13 @@
+auth:
+  password: "{noop}password"
+cloud:
+  aws:
+    rds:
+      instances:
+        - db-instance-identifier: beans-sql-db
+          username: ${DB_USER}
+          password: ${DB_PASSWORD}
+          databaseName: monolith
+    region:
+      static: us-west-2
+      auto: false
