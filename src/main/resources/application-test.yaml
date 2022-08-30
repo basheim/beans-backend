@@ -1,0 +1,13 @@
+auth:
+  password: "{noop}password"
+cloud:
+  aws:
+    rds:
+      instances:
+        - db-instance-identifier: test
+          username: test
+          password: test
+          databaseName: test
+    region:
+      static: us-west-2
+      auto: false
