@@ -31,7 +31,7 @@ public class ForageleService {
 
     public void writePlant(Plant plant) {
         jdbcTemplate.update(
-                "INSERT INTO plants (id,name,fact1,fact2,fact3,fact4,fact5,image) VALUES (?,?,?,?,?,?,?,?)",
+                "INSERT INTO plants (id,name,fact1,fact2,fact3,fact4,fact5,image) VALUES (?,?,?,?,?,?,?,?);",
                 plant.getId(),
                 plant.getName(),
                 plant.getFact1(),
@@ -41,5 +41,10 @@ public class ForageleService {
                 plant.getFact5(),
                 plant.getImage()
         );
+    }
+
+    // Utility function for ease of use
+    public void deleteAllPlants() {
+        jdbcTemplate.update("DELETE FROM plants;");
     }
 }

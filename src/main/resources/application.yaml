@@ -3,7 +3,7 @@ spring:
     testWhileIdle: true
     validationQuery: "SELECT 1"
 auth:
-  password: "{noop}password"
+  password: "{noop}${API_PASSWORD}"
 cloud:
   aws:
     rds:

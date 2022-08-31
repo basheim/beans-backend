@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -28,5 +27,10 @@ public class ForageleController {
     @PostMapping("/plants")
     public void importPlant(@RequestBody Plant plant) {
         forageleService.writePlant(plant);
+    }
+
+    @DeleteMapping("/plants")
+    public void deleteAllPlants() {
+        forageleService.deleteAllPlants();
     }
 }
