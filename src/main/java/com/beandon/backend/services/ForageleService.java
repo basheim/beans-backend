@@ -40,13 +40,14 @@ public class ForageleService {
     @Transactional
     public void writePlant(CompletePlantData plant) {
         jdbcTemplate.update(
-                "INSERT INTO plants (id,name,region,edibility,mostNotableFeature,imageUrl) VALUES (?,?,?,?,?,?);",
+                "INSERT INTO plants (id,name,edibility,imageUrl,foundNear,keyFeatures,poisonousLookAlike) VALUES (?,?,?,?,?,?,?);",
                 plant.getId(),
                 plant.getEnglish(),
-                plant.getRegion(),
                 plant.getEdibility(),
-                plant.getMostNotableFeature(),
-                plant.getImageUrl()
+                plant.getImageUrl(),
+                plant.getFoundNear(),
+                plant.getKeyFeatures(),
+                plant.getPoisonousLookAlike()
         );
         jdbcTemplate.update(
                 "INSERT INTO plants_names (id,english,latin) VALUES (?,?,?);",

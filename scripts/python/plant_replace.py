@@ -5,16 +5,19 @@ import getopt
 import csv
 import requests
 import os
+import uuid
+import random
+from datetime import date, datetime, timedelta, time
 
-base_url = "http://beans-backend-lb-282639646.us-west-2.elb.amazonaws.com:80"
-post_delete_url = "/api/v1/plants"
-to_delete = False
-api_user = "admin"
+base_url = 'http://beans-backend-lb-282639646.us-west-2.elb.amazonaws.com:80'
+post_delete_url = '/api/v1/plants'
+api_user = 'admin'
 api_password = os.getenv('API_PASSWORD')
+
 
 def main(argv):
     # get the file arg
-    input_file = get_input_file(argv)
+    (input_file, to_delete) = get_args(argv)
     # delete all data
     session = requests.session()
     session.auth = (api_user, api_password)
@@ -22,13 +25,32 @@ def main(argv):
         session.delete(url=base_url + post_delete_url)
 
     with open(input_file, newline='') as csv_file:
+        start_date = datetime.combine(date.today(), time.min)
         reader = csv.DictReader(csv_file)
-        for row in reader:
-            print(row)
+        date_counter = 0
+        raw_data = []
+        for raw_row in reader:
+            raw_data.append(raw_row)
+        random.shuffle(raw_data)
+        for row in raw_data:
+            data = {
+                'id': str(uuid.uuid4()),
+                'english': row['english'],
+                'latin': row['latin'],
+                'edibility': row['edibility'],
+                'imageUrl': row['imageUrl'],
+                'poisonousLookAlike': row['poisonousLookAlike'],
+                'foundNear': row['foundNear'],
+                'keyFeatures': row['keyFeatures'],
+                'start': (start_date + timedelta(days=date_counter)).isoformat(),
+                'end': (start_date + timedelta(days=date_counter + 1)).isoformat()
+            }
+            date_counter += 1
 
 
-def get_input_file(argv):
+def get_args(argv):
     input_file = None
+    to_delete = False
     try:
         opts, args = getopt.getopt(argv,"hdi:")
     except getopt.GetoptError:
@@ -45,7 +67,7 @@ def get_input_file(argv):
     if not input_file:
         print('-i is required')
         sys.exit()
-    return input_file
+    return input_file, to_delete
 
 
 if __name__ == "__main__":

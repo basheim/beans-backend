@@ -9,9 +9,10 @@ import java.sql.Timestamp;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CompletePlantData {
     private String id;
-    private String region;
+    private String poisonousLookAlike;
     private String edibility;
-    private String mostNotableFeature;
+    private String foundNear;
+    private String keyFeatures;
     private String imageUrl;
     private String english;
     private String latin;

@@ -5,8 +5,9 @@ import lombok.Data;
 public class Plant {
     private String id;
     private String name;
-    private String region;
+    private String poisonousLookAlike;
     private String edibility;
-    private String mostNotableFeature;
+    private String foundNear;
+    private String keyFeatures;
     private String imageUrl;
 }
