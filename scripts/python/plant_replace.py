@@ -11,22 +11,27 @@ from datetime import date, datetime, timedelta, time
 
 base_url = 'http://beans-backend-lb-282639646.us-west-2.elb.amazonaws.com:80'
 post_delete_url = '/api/v1/plants'
+get_latest_date_url = '/api/v1/plants/latestDate'
 api_user = 'admin'
 api_password = os.getenv('API_PASSWORD')
 
 
 def main(argv):
+    start_date = datetime.combine(date.today(), time.min)
     # get the file arg
     (input_file, to_delete) = get_args(argv)
     # set up the session
     session = requests.session()
     session.auth = (api_user, api_password)
-    # delete all data
+    # delete all data and start over
     if to_delete:
         session.delete(url=base_url + post_delete_url)
+    else:
+        res = session.get(url=base_url + get_latest_date_url)
+        start_date = datetime.strptime(res.json()['latestDate'], '%Y-%m-%dT%H:%M:%S.%f%z')
+
     # write the data to the db
     with open(input_file, newline='') as csv_file:
-        start_date = datetime.combine(date.today(), time.min)
         reader = csv.DictReader(csv_file)
         date_counter = 0
         raw_data = []
