@@ -3,4 +3,3 @@
 build/
 gradle/
 .env
-scripts/python/data
