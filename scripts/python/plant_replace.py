@@ -18,12 +18,13 @@ api_password = os.getenv('API_PASSWORD')
 def main(argv):
     # get the file arg
     (input_file, to_delete) = get_args(argv)
-    # delete all data
+    # set up the session
     session = requests.session()
     session.auth = (api_user, api_password)
+    # delete all data
     if to_delete:
         session.delete(url=base_url + post_delete_url)
-
+    # write the data to the db
     with open(input_file, newline='') as csv_file:
         start_date = datetime.combine(date.today(), time.min)
         reader = csv.DictReader(csv_file)
@@ -46,6 +47,7 @@ def main(argv):
                 'end': (start_date + timedelta(days=date_counter + 1)).isoformat()
             }
             date_counter += 1
+            session.post(url=base_url + post_delete_url, json=data)
 
 
 def get_args(argv):

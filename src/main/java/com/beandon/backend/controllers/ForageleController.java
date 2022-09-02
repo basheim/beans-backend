@@ -1,6 +1,7 @@
 package com.beandon.backend.controllers;
 
 import com.beandon.backend.pojo.CompletePlantData;
+import com.beandon.backend.pojo.PlantLatestDate;
 import com.beandon.backend.services.ForageleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -32,5 +33,10 @@ public class ForageleController {
     @DeleteMapping("/plants")
     public void deleteAllPlants() {
         forageleService.deleteAllPlants();
+    }
+
+    @GetMapping("/plants/latestDate")
+    public PlantLatestDate getPlantsLatestDate() {
+        return forageleService.getLatestDate();
     }
 }
