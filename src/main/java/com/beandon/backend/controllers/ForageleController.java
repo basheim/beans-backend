@@ -1,11 +1,15 @@
 package com.beandon.backend.controllers;
 
 import com.beandon.backend.pojo.CompletePlantData;
+import com.beandon.backend.pojo.PlantImage;
 import com.beandon.backend.pojo.PlantLatestDate;
+import com.beandon.backend.services.ForageleFileService;
 import com.beandon.backend.services.ForageleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URL;
 import java.util.List;
 
 @RestController
@@ -14,6 +18,7 @@ import java.util.List;
 public class ForageleController {
 
     private final ForageleService forageleService;
+    private final ForageleFileService fileService;
 
     @GetMapping("/plants")
     public List<CompletePlantData> getAllPlants() {
@@ -38,5 +43,13 @@ public class ForageleController {
     @GetMapping("/plants/latestDate")
     public PlantLatestDate getPlantsLatestDate() {
         return forageleService.getLatestDate();
+    }
+
+    @PostMapping("/plants/image/save")
+    public PlantImage saveImage(@RequestParam("file") MultipartFile multipartFile) {
+        URL url = fileService.save(multipartFile);
+        return PlantImage.builder()
+                .url(url.toString())
+                .build();
     }
 }

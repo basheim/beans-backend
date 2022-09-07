@@ -9,7 +9,7 @@ import uuid
 import random
 from datetime import date, datetime, timedelta, time
 
-base_url = 'http://beans-backend-lb-282639646.us-west-2.elb.amazonaws.com:80'
+base_url = 'https://backend.programmingbean.com'
 post_delete_url = '/api/v1/plants'
 get_latest_date_url = '/api/v1/plants/latestDate'
 api_user = 'admin'
