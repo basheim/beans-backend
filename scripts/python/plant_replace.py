@@ -12,6 +12,7 @@ from datetime import date, datetime, timedelta, time
 base_url = 'https://backend.programmingbean.com'
 post_delete_url = '/api/v1/plants'
 get_latest_date_url = '/api/v1/plants/latestDate'
+upload_image_url = '/api/v1/plants/images/save'
 api_user = 'admin'
 api_password = os.getenv('API_PASSWORD')
 
@@ -19,7 +20,7 @@ api_password = os.getenv('API_PASSWORD')
 def main(argv):
     start_date = datetime.combine(date.today(), time.min)
     # get the file arg
-    (input_file, to_delete) = get_args(argv)
+    (input_file, image_directory, to_delete) = get_args(argv)
     # set up the session
     session = requests.session()
     session.auth = (api_user, api_password)
@@ -39,12 +40,15 @@ def main(argv):
             raw_data.append(raw_row)
         random.shuffle(raw_data)
         for row in raw_data:
+            with open(image_directory + '/' + row['image'], 'rb') as image_file:
+                image_response = session.post(url=base_url + upload_image_url, data=image_file)
+                image_url = image_response.json()['url']
             data = {
                 'id': str(uuid.uuid4()),
                 'english': row['english'],
                 'latin': row['latin'],
                 'edibility': row['edibility'],
-                'imageUrl': row['imageUrl'],
+                'imageUrl': image_url,
                 'poisonousLookAlike': row['poisonousLookAlike'],
                 'foundNear': row['foundNear'],
                 'keyFeatures': row['keyFeatures'],
@@ -57,24 +61,30 @@ def main(argv):
 
 def get_args(argv):
     input_file = None
+    image_directory = None
     to_delete = False
     try:
-        opts, args = getopt.getopt(argv,"hdi:")
+        opts, args = getopt.getopt(argv,"hdi:j:")
     except getopt.GetoptError:
-        print('plant_replace.py -i opt:<input file> -d <delete all data>')
+        print('plant_replace.py -i opt:<input file> -j opt:<image directory> -d <delete all data>')
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print('plant_replace.py -i opt:<input file> -d <delete all data>')
+            print('plant_replace.py -i opt:<input file> -j opt:<image directory> -d <delete all data>')
             sys.exit()
         elif opt == "-i":
             input_file = arg
+        elif opt == "-j":
+            image_directory = arg
         elif opt == "-d":
             to_delete = True
     if not input_file:
         print('-i is required')
         sys.exit()
-    return input_file, to_delete
+    if not image_directory:
+        print('-j is required')
+        sys.exit()
+    return input_file, image_directory, to_delete
 
 
 if __name__ == "__main__":
