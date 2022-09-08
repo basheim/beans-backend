@@ -37,4 +37,4 @@ cloud:
       auto: false
 logging:
   level:
-    org.springframework.web.filter.*: DEBUG
+    org.springframework.web: INFO
