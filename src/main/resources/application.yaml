@@ -35,3 +35,6 @@ cloud:
     region:
       static: us-west-2
       auto: false
+logging:
+  level:
+    org.springframework.web.filter.*: DEBUG

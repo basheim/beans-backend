@@ -12,7 +12,7 @@ from datetime import date, datetime, timedelta, time
 base_url = 'https://backend.programmingbean.com'
 post_delete_url = '/api/v1/plants'
 get_latest_date_url = '/api/v1/plants/latestDate'
-upload_image_url = '/api/v1/plants/images/save'
+upload_image_url = '/api/v1/plants/image/save'
 api_user = 'admin'
 api_password = os.getenv('API_PASSWORD')
 
@@ -40,8 +40,10 @@ def main(argv):
             raw_data.append(raw_row)
         random.shuffle(raw_data)
         for row in raw_data:
-            with open(image_directory + '/' + row['image'], 'rb') as image_file:
-                image_response = session.post(url=base_url + upload_image_url, data=image_file)
+            image_path = image_directory + '/' + row['image']
+            with open(image_path, 'rb') as image_file:
+                data = {'file': image_file}
+                image_response = session.post(url=base_url + upload_image_url, files=data)
                 image_url = image_response.json()['url']
             data = {
                 'id': str(uuid.uuid4()),
