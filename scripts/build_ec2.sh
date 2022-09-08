@@ -17,5 +17,3 @@ if [ -n "${CONTAINER_ID}" ]; then
 fi
 
 docker run --env-file .env -dp 8080:8080 --name beans-backend beans-backend:latest
-
-pm2 start ./scripts/keep_db_open.sh --cron "0 * * * *"
