@@ -68,7 +68,7 @@ public class BlogService {
                 post.getDescription(),
                 post.getAuthor(),
                 post.getContent(),
-                post.getTags(),
+                String.join(",", post.getTags()),
                 post.getCreatedDate(),
                 post.getPrev(),
                 post.getNext()
