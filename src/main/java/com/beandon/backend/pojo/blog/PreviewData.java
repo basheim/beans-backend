@@ -12,5 +12,5 @@ public class PreviewData {
     private String id;
     private String description;
     private Timestamp createdDate;
-    private String tag;
+    private String tags;
 }

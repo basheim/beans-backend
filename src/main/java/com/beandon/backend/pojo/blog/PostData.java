@@ -14,5 +14,7 @@ public class PostData {
     private Timestamp createdDate;
     private String content;
     private String author;
-    private String tag;
+    private String tags;
+    private String prev;
+    private String next;
 }

@@ -28,7 +28,7 @@ public class BlogService {
 
     public List<PreviewData> getAllPreviews() {
         return jdbcTemplate.query(
-                "SELECT id, title, description, createdDate, tag FROM posts;",
+                "SELECT id, title, description, createdDate, tags FROM posts;",
                 new BeanPropertyRowMapper<>(PreviewData.class));
     }
 
@@ -48,10 +48,10 @@ public class BlogService {
         }
         List<PreviewData> previewData =
                 jdbcTemplate.query(
-                        String.format("SELECT id, title, description, createdDate, tag FROM posts " +
-                                "WHERE tag='%s' " +
+                        String.format("SELECT id, title, description, createdDate, tags FROM posts " +
+                                "WHERE tags IN (%s) " +
                                 "AND NOT id='%s' " +
-                                "LIMIT %d;", mainPost.getTag(), mainPost.getId(), PREVIEW_LIMIT),
+                                "LIMIT %d;", mainPost.getTags(), mainPost.getId(), PREVIEW_LIMIT),
                         new BeanPropertyRowMapper<>(PreviewData.class));
         return PostPageData.builder()
                 .post(mainPost)
@@ -61,14 +61,16 @@ public class BlogService {
 
     public void writePost(PostData post) {
         jdbcTemplate.update(
-                "INSERT INTO posts (id,title,description,author,content,tag,createdDate) VALUES (?,?,?,?,?,?,?);",
+                "INSERT INTO posts (id,title,description,author,content,tags,createdDate,prev,next) VALUES (?,?,?,?,?,?,?,?,?);",
                 post.getId(),
                 post.getTitle(),
                 post.getDescription(),
                 post.getAuthor(),
                 post.getContent(),
-                post.getTag(),
-                post.getCreatedDate()
+                post.getTags(),
+                post.getCreatedDate(),
+                post.getPrev(),
+                post.getNext()
         );
     }
 
@@ -76,5 +78,9 @@ public class BlogService {
         jdbcTemplate.update(String.format("DELETE FROM posts " +
                 "WHERE id='%s' " +
                 "LIMIT 1;", id));
+    }
+
+    public void deleteAllPosts() {
+        jdbcTemplate.update("DELETE FROM posts;");
     }
 }

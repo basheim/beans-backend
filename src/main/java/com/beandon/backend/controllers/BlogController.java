@@ -36,6 +36,11 @@ public class BlogController {
         this.blogService.deletePost(id);
     }
 
+    @DeleteMapping("/posts")
+    public void deleteAllPosts() {
+        this.blogService.deleteAllPosts();
+    }
+
     @PostMapping("/posts")
     public void submitPost(@RequestBody PostData postData) {
         this.blogService.writePost(postData);
