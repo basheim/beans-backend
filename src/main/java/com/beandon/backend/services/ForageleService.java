@@ -1,9 +1,9 @@
 package com.beandon.backend.services;
 
 
-import com.beandon.backend.pojo.CompletePlantData;
-import com.beandon.backend.pojo.PlantLatestDate;
-import com.beandon.backend.pojo.SelectedPlant;
+import com.beandon.backend.pojo.foragele.CompletePlantData;
+import com.beandon.backend.pojo.foragele.PlantLatestDate;
+import com.beandon.backend.pojo.foragele.SelectedPlant;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public class ForageleService {
                 String.format("SELECT * FROM plants " +
                                 "INNER JOIN plants_names ON plants.id = plants_names.id " +
                                 "INNER JOIN selected_plants ON plants.id = selected_plants.id " +
-                                "where plants.id='%s';",
+                                "WHERE plants.id='%s';",
                         id),
                 new BeanPropertyRowMapper<>(CompletePlantData.class));
     }

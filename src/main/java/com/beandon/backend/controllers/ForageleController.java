@@ -1,8 +1,8 @@
 package com.beandon.backend.controllers;
 
-import com.beandon.backend.pojo.CompletePlantData;
-import com.beandon.backend.pojo.PlantImage;
-import com.beandon.backend.pojo.PlantLatestDate;
+import com.beandon.backend.pojo.foragele.CompletePlantData;
+import com.beandon.backend.pojo.foragele.PlantImage;
+import com.beandon.backend.pojo.foragele.PlantLatestDate;
 import com.beandon.backend.services.ForageleFileService;
 import com.beandon.backend.services.ForageleService;
 import lombok.RequiredArgsConstructor;

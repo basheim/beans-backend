@@ -1,4 +1,4 @@
-package com.beandon.backend.pojo;
+package com.beandon.backend.pojo.blog;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
@@ -7,8 +7,10 @@ import java.sql.Timestamp;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SelectedPlant {
+public class PreviewData {
+    private String title;
     private String id;
-    private Timestamp start;
-    private Timestamp end;
+    private String description;
+    private Timestamp createdDate;
+    private String tag;
 }

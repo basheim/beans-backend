@@ -1,4 +1,4 @@
-package com.beandon.backend.pojo;
+package com.beandon.backend.pojo.foragele;
 
 import lombok.Builder;
 import lombok.Data;

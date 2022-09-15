@@ -1,4 +1,4 @@
-package com.beandon.backend.pojo;
+package com.beandon.backend.pojo.foragele;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
