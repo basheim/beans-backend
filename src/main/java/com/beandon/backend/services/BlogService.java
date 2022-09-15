@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -51,7 +52,7 @@ public class BlogService {
                         String.format("SELECT id, title, description, createdDate, tags FROM posts " +
                                 "WHERE tags IN (%s) " +
                                 "AND NOT id='%s' " +
-                                "LIMIT %d;", mainPost.getTags(), mainPost.getId(), PREVIEW_LIMIT),
+                                "LIMIT %d;", mainPost.getTags().stream().collect(Collectors.joining("','", "'", "'")), mainPost.getId(), PREVIEW_LIMIT),
                         new BeanPropertyRowMapper<>(PreviewData.class));
         return PostPageData.builder()
                 .post(mainPost)

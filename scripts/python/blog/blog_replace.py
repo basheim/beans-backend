@@ -27,12 +27,10 @@ def main(argv):
     # write the data to the db
     with open(input_file, newline='') as csv_file:
         reader = csv.DictReader(csv_file)
-        date_counter = 0
         raw_data = []
         for raw_row in reader:
-            raw_row.createdDate = datetime.strptime(raw_row.createdDate, '%Y-%m-%dT%H:%M:%S.%f%z')
             raw_data.append(raw_row)
-        raw_data.sort(key=lambda r: r.createdDate)
+        raw_data.sort(key=lambda r: datetime.strptime(r['createdDate'], '%Y-%m-%dT%H:%M:%S.%f%z'))
         for row in raw_data:
             md_path = md_directory + '/' + row['content']
             with open(md_path, 'r') as md_file:
