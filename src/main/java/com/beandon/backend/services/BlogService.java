@@ -47,17 +47,33 @@ public class BlogService {
         if (mainPost == null) {
             throw new IllegalStateException("Main post not found");
         }
+
         List<PreviewData> previewData =
                 jdbcTemplate.query(
                         String.format("SELECT id, title, description, createdDate, tags FROM posts " +
-                                "WHERE tags IN (%s) " +
+                                "WHERE (%s) " +
                                 "AND NOT id='%s' " +
-                                "LIMIT %d;", mainPost.getTags().stream().collect(Collectors.joining("','", "'", "'")), mainPost.getId(), PREVIEW_LIMIT),
+                                "LIMIT %d;", getContainsString(mainPost.getTags(), "tags"), mainPost.getId(), PREVIEW_LIMIT),
                         new BeanPropertyRowMapper<>(PreviewData.class));
         return PostPageData.builder()
                 .post(mainPost)
                 .previews(previewData)
                 .build();
+    }
+
+    private String getContainsString(List<String> tags, String column) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tags.size(); i++) {
+            if (i != 0) {
+                sb.append("OR ");
+            }
+            sb.append(column);
+            sb.append(" ");
+            sb.append("LIKE '%");
+            sb.append(tags.get(i));
+            sb.append("%' ");
+        }
+        return sb.toString();
     }
 
     public void writePost(PostData post) {

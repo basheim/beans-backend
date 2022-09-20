@@ -16,8 +16,11 @@ the more expensive features in AWS.
 
 ### The Calm Before the Storm
 When I decided to create this website, I already had an idea of the frameworks that I would be working with. 
+
 * NextJS + React + Typescript for the frontend. 
+
 * Gradle + Spring + Java + Docker for the backend. 
+
 * Python / Bash for various build / deploy scripts. 
 
 So to start, I quickly got a basic frontend up and running. NextJS is super simple to get started and getting a working 
