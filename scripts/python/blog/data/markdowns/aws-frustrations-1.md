@@ -79,5 +79,5 @@ At this point I was stumped and decided to not use automation since clicking a b
 happen to make some ad revenue in the future I can think about having a budget to automate. At this point, I had wasted 
 a few hours bashing my head into the wall and decided to call it a day.
 
-Continue on to part 2, where I will discuss ECS, IAM, and EC2.
+Continue on to part 2, where I will discuss ECS and EC2.
 
