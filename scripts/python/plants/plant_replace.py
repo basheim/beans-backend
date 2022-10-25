@@ -68,11 +68,11 @@ def get_args(argv):
     try:
         opts, args = getopt.getopt(argv,"hdi:j:")
     except getopt.GetoptError:
-        print('blog_replace.py -i opt:<input file> -j opt:<image directory> -d <delete all data>')
+        print('plant_replace.py -i opt:<input file> -j opt:<image directory> -d <delete all data>')
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print('blog_replace.py -i opt:<input file> -j opt:<image directory> -d <delete all data>')
+            print('plant_replace.py -i opt:<input file> -j opt:<image directory> -d <delete all data>')
             sys.exit()
         elif opt == "-i":
             input_file = arg
