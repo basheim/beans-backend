@@ -28,7 +28,7 @@ def main(argv):
     if last_date > start_date + timedelta(days=1):
         sys.exit()
 
-    os.system('python -s ' + script_path + ' -i ' + input_file + ' -j ' + image_directory + ' -d')
+    os.system('python3 -s ' + script_path + ' -i ' + input_file + ' -j ' + image_directory + ' -d')
 
 
 def get_args(argv):
