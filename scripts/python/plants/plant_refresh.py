@@ -26,7 +26,7 @@ def main(argv):
     last_date = datetime.strptime(res.json()['latestDate'], '%Y-%m-%dT%H:%M:%S.%f%z')
 
     if last_date.timestamp() > (start_date + timedelta(days=1)).timestamp():
-        sys.exit()
+        sys.exit(0)
 
     os.system('python3 ' + script_path + ' -i ' + input_file + ' -j ' + image_directory + ' -d')
 
@@ -43,7 +43,7 @@ def get_args(argv):
     for opt, arg in opts:
         if opt == '-h':
             print('plant_refresh.py -i opt:<input file> -j opt:<image directory> -s opt:<script path>')
-            sys.exit()
+            sys.exit(0)
         elif opt == "-i":
             input_file = arg
         elif opt == "-j":
