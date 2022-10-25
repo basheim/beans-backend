@@ -4,7 +4,7 @@ import sys
 import getopt
 import requests
 import os
-from datetime import date, datetime, timedelta, time
+from datetime import date, datetime, timedelta, time, timezone
 
 base_url = 'https://backend.programmingbean.com'
 post_delete_url = '/api/v1/plants'
@@ -15,7 +15,7 @@ api_password = os.getenv('API_PASSWORD')
 
 
 def main(argv):
-    start_date = datetime.combine(date.today(), time.min)
+    start_date = datetime.combine(date.today(), time.min).replace(tzinfo=timezone(offset=timedelta()))
     # get the file arg
     (input_file, image_directory, script_path) = get_args(argv)
     # set up the session
