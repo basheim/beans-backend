@@ -4,7 +4,7 @@ import sys
 import getopt
 import requests
 import os
-from datetime import date, datetime, timedelta, time, timezone
+from datetime import date, datetime, timedelta, time
 
 base_url = 'https://backend.programmingbean.com'
 post_delete_url = '/api/v1/plants'
@@ -15,7 +15,7 @@ api_password = os.getenv('API_PASSWORD')
 
 
 def main(argv):
-    start_date = datetime.combine(date.today(), time.min).replace(tzinfo=timezone(offset=timedelta()))
+    start_date = datetime.combine(date.today(), time.min)
     # get the file arg
     (input_file, image_directory, script_path) = get_args(argv)
     # set up the session
@@ -25,10 +25,10 @@ def main(argv):
     res = session.get(url=base_url + get_latest_date_url)
     last_date = datetime.strptime(res.json()['latestDate'], '%Y-%m-%dT%H:%M:%S.%f%z')
 
-    if last_date > start_date + timedelta(days=1):
+    if last_date.timestamp() > (start_date + timedelta(days=1)).timestamp():
         sys.exit()
 
-    os.system('python3 -s ' + script_path + ' -i ' + input_file + ' -j ' + image_directory + ' -d')
+    os.system('python3 ' + script_path + ' -i ' + input_file + ' -j ' + image_directory + ' -d')
 
 
 def get_args(argv):
