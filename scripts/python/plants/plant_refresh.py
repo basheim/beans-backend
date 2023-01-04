@@ -22,8 +22,7 @@ def main(argv):
     session = requests.session()
     session.auth = (api_user, api_password)
     # delete all data and start over
-    res = session.get(url=base_url + get_latest_date_url)
-    print(res.text)
+    res = session.get(url=base_url + get_latest_date_url)/
     last_date = datetime.strptime(res.json()['latestDate'], '%Y-%m-%dT%H:%M:%S.%f%z')
 
     if last_date.timestamp() > (start_date + timedelta(days=1)).timestamp():
