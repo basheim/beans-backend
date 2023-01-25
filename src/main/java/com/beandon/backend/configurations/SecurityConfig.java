@@ -29,6 +29,8 @@ public class SecurityConfig {
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/v1/posts/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/v1/stocks").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/v1/stocks/**").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/v1/transactions").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/v1/transactions/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/v1/previews").permitAll();
         http.authorizeRequests().anyRequest().authenticated().and().httpBasic();
         http.csrf().disable();
