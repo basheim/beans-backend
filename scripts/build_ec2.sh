@@ -9,7 +9,7 @@ echo "API_PASSWORD=$(aws secretsmanager get-secret-value --secret-id prod/api-pa
 
 docker build . -t beans-backend
 
-CONTAINER_ID=$(docker ps --filter "name=beans-backend" -q)
+CONTAINER_ID=$(docker ps -a --filter "name=beans-backend" -q)
 
 if [ -n "${CONTAINER_ID}" ]; then
   docker stop "${CONTAINER_ID}"
