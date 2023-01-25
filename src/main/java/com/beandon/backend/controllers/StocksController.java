@@ -1,5 +1,6 @@
 package com.beandon.backend.controllers;
 
+import com.beandon.backend.pojo.stocks.AccountOverview;
 import com.beandon.backend.pojo.stocks.StockData;
 import com.beandon.backend.pojo.stocks.TransactionData;
 import com.beandon.backend.services.StocksService;
@@ -31,5 +32,10 @@ public class StocksController {
             date = Instant.now().minusSeconds(60 * 60 * 24 * 7).toEpochMilli();
         }
         return stocksService.getAllTransactions(Timestamp.from(Instant.ofEpochMilli(date)));
+    }
+
+    @GetMapping("/account")
+    public AccountOverview getAccountOverview() {
+        return stocksService.getAccountOverview();
     }
 }
