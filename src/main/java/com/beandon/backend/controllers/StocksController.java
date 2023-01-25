@@ -28,7 +28,7 @@ public class StocksController {
     @GetMapping("/transactions")
     public List<TransactionData> getAllTransactions(@RequestParam(required = false) Long date) {
         if (date == null) {
-            date = Instant.now().minusSeconds(60 * 60 * 24).toEpochMilli();
+            date = Instant.now().minusSeconds(60 * 60 * 24 * 7).toEpochMilli();
         }
         return stocksService.getAllTransactions(Timestamp.from(Instant.ofEpochMilli(date)));
     }

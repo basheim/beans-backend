@@ -25,8 +25,6 @@ public class StocksService {
     }
 
     public List<TransactionData> getAllTransactions(Timestamp date) {
-        System.out.println(String.format("SELECT * FROM stock_transactions " +
-                "WHERE date > '%s';", date.toString()));
         return jdbcTemplate.query(
                 String.format("SELECT * FROM stock_transactions " +
                         "WHERE date > '%s';", date.toString()),
