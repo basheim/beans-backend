@@ -7,13 +7,11 @@ echo "DB_PASSWORD=$(aws secretsmanager get-secret-value --secret-id prod/beansql
 echo "DB_USER=$(aws secretsmanager get-secret-value --secret-id prod/beansql --query SecretString | jq fromjson | jq -r .username)" >> .env
 echo "API_PASSWORD=$(aws secretsmanager get-secret-value --secret-id prod/api-password --query SecretString | jq fromjson | jq -r .password)" >> .env
 
-docker build . -t beans-backend
-
 CONTAINER_ID=$(docker ps -a --filter "name=beans-backend" -q)
 
 if [ -n "${CONTAINER_ID}" ]; then
   docker stop "${CONTAINER_ID}"
   docker rm "${CONTAINER_ID}"
 fi
-
-docker run --env-file .env -dp 8080:8080 --name beans-backend beans-backend:latest
+docker pull basheim/beans-backend:latest
+docker run --env-file .env -dp 8080:8080 --name beans-backend basheim/beans-backend:latest
