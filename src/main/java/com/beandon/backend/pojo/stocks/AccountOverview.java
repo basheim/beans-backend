@@ -8,6 +8,6 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountOverview {
-    private int amount;
-    private double percentChange;
+    private float amount;
+    private float percentChange;
 }

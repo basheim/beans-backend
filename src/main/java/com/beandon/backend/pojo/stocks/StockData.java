@@ -9,5 +9,6 @@ public class StockData {
     private String id;
     private String name;
     private String code;
-    private int quantity;
+    private float quantity;
+    private float price;
 }

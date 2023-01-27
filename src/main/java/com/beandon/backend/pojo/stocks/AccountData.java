@@ -7,5 +7,5 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountData {
     private String id;
-    private int amount;
+    private float amount;
 }

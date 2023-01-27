@@ -12,7 +12,7 @@ public class TransactionData {
     private String name;
     private String stockId;
     private String action;
-    private int price;
-    private int quantity;
+    private float price;
+    private float quantity;
     private Timestamp date;
 }
