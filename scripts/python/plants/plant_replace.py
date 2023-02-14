@@ -9,7 +9,7 @@ import uuid
 import random
 from datetime import date, datetime, timedelta, time
 
-base_url = 'https://backend.programmingbean.com'
+base_url = 'http://localhost:8080'
 post_delete_url = '/api/v1/plants'
 get_latest_date_url = '/api/v1/plants/latestDate'
 upload_image_url = '/api/v1/plants/image/save'
@@ -44,6 +44,7 @@ def main(argv):
             with open(image_path, 'rb') as image_file:
                 data = {'file': image_file}
                 image_response = session.post(url=base_url + upload_image_url, files=data)
+                print(str(image_response.json()))
                 image_url = image_response.json()['url']
             data = {
                 'id': str(uuid.uuid4()),
