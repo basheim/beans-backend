@@ -33,7 +33,7 @@ public class StocksService {
     public List<TransactionData> getAllTransactions(Timestamp date) {
         return jdbcTemplate.query(
                 String.format("SELECT * FROM stock_transactions " +
-                        "WHERE date > '%s';", date.toString()),
+                        "WHERE date > '%s' ORDER BY date DESC;", date.toString()),
                 new BeanPropertyRowMapper<>(TransactionData.class));
     }
 
