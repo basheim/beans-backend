@@ -7,7 +7,7 @@ import requests
 import os
 import uuid
 import random
-from datetime import date, datetime, timedelta, time
+from datetime import date, datetime, timedelta
 
 base_url = 'http://localhost:8080'
 post_delete_url = '/api/v1/plants'
@@ -18,7 +18,7 @@ api_password = os.getenv('API_PASSWORD')
 
 
 def main(argv):
-    start_date = datetime.combine(date.today(), time.min)
+    start_date = datetime.combine(date.today(), datetime.min.time())
     # get the file arg
     (input_file, image_directory, to_delete) = get_args(argv)
     # set up the session
@@ -29,8 +29,8 @@ def main(argv):
         session.delete(url=base_url + post_delete_url)
     else:
         res = session.get(url=base_url + get_latest_date_url)
-        start_date = datetime.strptime(res.json()['latestDate'], '%Y-%m-%dT%H:%M:%S.%f%z')
-
+        start_date = datetime.combine(datetime.strptime(res.json()['latestDate'], '%Y-%m-%dT%H:%M:%S.%f%z').date(), datetime.min.time())
+    start_date = start_date.astimezone(None)
     # write the data to the db
     with open(input_file, newline='') as csv_file:
         reader = csv.DictReader(csv_file)
@@ -55,10 +55,10 @@ def main(argv):
                 'poisonousLookAlike': row['poisonousLookAlike'],
                 'foundNear': row['foundNear'],
                 'keyFeatures': row['keyFeatures'],
-                'start': (start_date + timedelta(days=date_counter)).isoformat(),
-                'end': (start_date + timedelta(days=date_counter + 1)).isoformat()
+                'start': start_date.isoformat(),
+                'end': (start_date + timedelta(days=1)).isoformat()
             }
-            date_counter += 1
+            start_date = datetime.combine((start_date + timedelta(days=1)).date(), datetime.min.time()).astimezone(None)
             session.post(url=base_url + post_delete_url, json=data)
 
 
