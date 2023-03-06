@@ -23,6 +23,7 @@ dependencies {
 	implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.296')
 	implementation 'com.amazonaws:aws-java-sdk-s3'
 	implementation 'mysql:mysql-connector-java:8.0.30'
+	implementation 'com.vladsch.flexmark:flexmark-all:0.64.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compileOnly 'org.projectlombok:lombok:1.18.24'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'

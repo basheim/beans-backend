@@ -1,20 +1,22 @@
 package com.beandon.backend.services;
 
-
 import com.beandon.backend.pojo.blog.PostData;
 import com.beandon.backend.pojo.blog.PostPageData;
 import com.beandon.backend.pojo.blog.PreviewData;
-import com.beandon.backend.pojo.foragele.CompletePlantData;
-import com.beandon.backend.pojo.foragele.PlantLatestDate;
-import com.beandon.backend.pojo.foragele.SelectedPlant;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.ast.Node;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.DataSource;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -24,10 +26,14 @@ public class BlogService {
     private static final int PREVIEW_LIMIT = 8;
     private final JdbcTemplate jdbcTemplate;
     private final FileService fileService;
+    private final Parser markdownParser;
+    private final HtmlRenderer htmlRenderer;
 
     public BlogService(DataSource dataSource, FileService fileService) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.fileService = fileService;
+        this.markdownParser = Parser.builder().build();
+        this.htmlRenderer = HtmlRenderer.builder().build();
     }
 
     public List<PreviewData> getAllPreviews() {
@@ -105,5 +111,15 @@ public class BlogService {
 
     public void deleteAllPosts() {
         jdbcTemplate.update("DELETE FROM posts;");
+    }
+
+    public URL savePost(MultipartFile multipartFile, String fileName) {
+        try {
+            Node document = markdownParser.parse(new String(multipartFile.getBytes(), StandardCharsets.UTF_8));
+            String html = htmlRenderer.render(document);
+            return fileService.save(new ByteArrayInputStream(html.getBytes(StandardCharsets.UTF_8)), S3_BUCKET_NAME, fileName);
+        } catch(IOException e) {
+            throw new IllegalStateException("File can not be converted to html.");
+        }
     }
 }
