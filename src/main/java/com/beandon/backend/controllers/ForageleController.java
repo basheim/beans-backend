@@ -1,9 +1,9 @@
 package com.beandon.backend.controllers;
 
+import com.beandon.backend.pojo.S3Content;
 import com.beandon.backend.pojo.foragele.CompletePlantData;
-import com.beandon.backend.pojo.foragele.PlantImage;
 import com.beandon.backend.pojo.foragele.PlantLatestDate;
-import com.beandon.backend.services.ForageleFileService;
+import com.beandon.backend.services.FileService;
 import com.beandon.backend.services.ForageleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ForageleController {
 
+    private static final String S3_BUCKET_NAME = "foragele-images";
+    private static final String RAW_S3_BUCKET_NAME = "foragele-raw-images";
+
     private final ForageleService forageleService;
-    private final ForageleFileService fileService;
+    private final FileService fileService;
 
     @GetMapping("/plants")
     public List<CompletePlantData> getAllPlants() {
@@ -46,9 +49,17 @@ public class ForageleController {
     }
 
     @PostMapping("/plants/image/save")
-    public PlantImage saveImage(@RequestParam("file") MultipartFile multipartFile) {
-        URL url = fileService.save(multipartFile);
-        return PlantImage.builder()
+    public S3Content saveImage(@RequestParam("file") MultipartFile multipartFile) {
+        URL url = fileService.save(multipartFile, S3_BUCKET_NAME);
+        return S3Content.builder()
+                .url(url.toString())
+                .build();
+    }
+
+    @PostMapping("/plants/raw/image/save")
+    public S3Content saveRawImage(@RequestParam("file") MultipartFile multipartFile) {
+        URL url = fileService.save(multipartFile, RAW_S3_BUCKET_NAME);
+        return S3Content.builder()
                 .url(url.toString())
                 .build();
     }

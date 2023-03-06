@@ -11,4 +11,5 @@ import java.util.List;
 public class PostPageData {
     private PostData post;
     private List<PreviewData> previews;
+    private String data;
 }

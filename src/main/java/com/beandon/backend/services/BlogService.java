@@ -20,11 +20,14 @@ import java.util.stream.Collectors;
 @Service
 public class BlogService {
 
+    private static final String S3_BUCKET_NAME = "beans-post-text";
     private static final int PREVIEW_LIMIT = 8;
     private final JdbcTemplate jdbcTemplate;
+    private final FileService fileService;
 
-    public BlogService(DataSource dataSource) {
+    public BlogService(DataSource dataSource, FileService fileService) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.fileService = fileService;
     }
 
     public List<PreviewData> getAllPreviews() {
@@ -48,6 +51,8 @@ public class BlogService {
             throw new IllegalStateException("Main post not found");
         }
 
+        String data = fileService.getText(S3_BUCKET_NAME, mainPost.getContent());
+
         List<PreviewData> previewData =
                 jdbcTemplate.query(
                         String.format("SELECT id, title, description, createdDate, tags FROM posts " +
@@ -58,6 +63,7 @@ public class BlogService {
         return PostPageData.builder()
                 .post(mainPost)
                 .previews(previewData)
+                .data(data)
                 .build();
     }
 
