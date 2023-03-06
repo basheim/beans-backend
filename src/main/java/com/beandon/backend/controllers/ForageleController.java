@@ -49,16 +49,16 @@ public class ForageleController {
     }
 
     @PostMapping("/plants/image/save")
-    public S3Content saveImage(@RequestParam("file") MultipartFile multipartFile) {
-        URL url = fileService.save(multipartFile, S3_BUCKET_NAME);
+    public S3Content saveImage(@RequestParam("file") MultipartFile multipartFile, @RequestParam("name") String fileName) {
+        URL url = fileService.save(multipartFile, S3_BUCKET_NAME, fileName);
         return S3Content.builder()
                 .url(url.toString())
                 .build();
     }
 
     @PostMapping("/plants/raw/image/save")
-    public S3Content saveRawImage(@RequestParam("file") MultipartFile multipartFile) {
-        URL url = fileService.save(multipartFile, RAW_S3_BUCKET_NAME);
+    public S3Content saveRawImage(@RequestParam("file") MultipartFile multipartFile, @RequestParam("name") String fileName) {
+        URL url = fileService.save(multipartFile, RAW_S3_BUCKET_NAME, fileName);
         return S3Content.builder()
                 .url(url.toString())
                 .build();
