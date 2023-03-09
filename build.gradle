@@ -17,9 +17,9 @@ jar {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'io.awspring.cloud:spring-cloud-starter-aws-jdbc:2.4.2'
+	implementation 'org.springframework.boot:spring-boot-starter-web:3.0.4'
+	implementation 'org.springframework.boot:spring-boot-starter-security:3.0.4'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc:3.0.4'
 	implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.296')
 	implementation 'com.amazonaws:aws-java-sdk-s3'
 	implementation 'mysql:mysql-connector-java:8.0.30'

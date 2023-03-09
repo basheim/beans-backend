@@ -3,38 +3,19 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-  datasource:
-    testOnBorrow: true
-    testWhileIdle: true
-    timeBetweenEvictionRunsMillis: 3600000
-    validationQuery: "SELECT 1"
-    tomcat:
-      testOnBorrow: true
-      testWhileIdle: true
-      timeBetweenEvictionRunsMillis: 3600000
-      validationQuery: "SELECT 1"
-    dbcp:
-      testOnBorrow: true
-      testWhileIdle: true
-      timeBetweenEvictionRunsMillis: 3600000
-      validationQuery: "SELECT 1"
+aws:
+  region: us-west-2
+  rds:
+    jdbcUrl: "jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}"
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    maximumPoolSize: 30
 access:
   key:
     id: ${AWS_ACCESS_KEY_ID}
     secret: ${AWS_SECRET_ACCESS_KEY}
 auth:
   password: "{noop}${API_PASSWORD}"
-cloud:
-  aws:
-    rds:
-      instances:
-        - db-instance-identifier: beans-sql-db
-          username: ${DB_USER}
-          password: ${DB_PASSWORD}
-          databaseName: monolith
-    region:
-      static: us-west-2
-      auto: false
 logging:
   level:
     org.springframework.web: INFO

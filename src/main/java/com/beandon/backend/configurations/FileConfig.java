@@ -16,7 +16,7 @@ public class FileConfig {
     @Value("${access.key.secret}")
     private String accessKeySecret;
 
-    @Value("${cloud.aws.region.static}")
+    @Value("${aws.region}")
     private String s3RegionName;
 
     @Bean
@@ -29,5 +29,4 @@ public class FileConfig {
                 .withRegion(s3RegionName)
                 .build();
     }
-
 }
