@@ -6,8 +6,10 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,7 +37,7 @@ public class FileService {
         try {
             return multipartFile.getInputStream();
         } catch (IOException ex) {
-            throw new IllegalArgumentException("File could not be written.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "File could not be written.");
         }
     }
 
@@ -45,7 +47,7 @@ public class FileService {
             final byte[] object = amazonS3.getObject(req).getObjectContent().readAllBytes();
             return new String(object, StandardCharsets.UTF_8);
         } catch (IOException ex) {
-            throw new IllegalArgumentException("File could not be read.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "File could not be read.");
         }
     }
 }

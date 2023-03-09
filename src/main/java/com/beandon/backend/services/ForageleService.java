@@ -4,10 +4,12 @@ package com.beandon.backend.services;
 import com.beandon.backend.pojo.foragele.CompletePlantData;
 import com.beandon.backend.pojo.foragele.PlantLatestDate;
 import com.beandon.backend.pojo.foragele.SelectedPlant;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -31,12 +33,12 @@ public class ForageleService {
 
     public CompletePlantData getPlant(String id) {
         return jdbcTemplate.queryForObject(
-                String.format("SELECT * FROM plants " +
-                                "INNER JOIN plants_names ON plants.id = plants_names.id " +
-                                "INNER JOIN selected_plants ON plants.id = selected_plants.id " +
-                                "WHERE plants.id='%s';",
-                        id),
-                new BeanPropertyRowMapper<>(CompletePlantData.class));
+                "SELECT * FROM plants " +
+                            "INNER JOIN plants_names ON plants.id = plants_names.id " +
+                            "INNER JOIN selected_plants ON plants.id = selected_plants.id " +
+                            "WHERE plants.id=?;",
+                new BeanPropertyRowMapper<>(CompletePlantData.class),
+                id);
     }
 
     @Transactional
@@ -81,7 +83,7 @@ public class ForageleService {
                         "LIMIT 1;",
                 new BeanPropertyRowMapper<>(SelectedPlant.class));
         if (plantDates == null) {
-            throw new IllegalStateException();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Plant dates are null");
         }
         return PlantLatestDate.builder()
                 .latestDate(plantDates.getEnd())

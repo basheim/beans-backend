@@ -5,6 +5,7 @@ import com.beandon.backend.pojo.blog.PostData;
 import com.beandon.backend.pojo.blog.PostPageData;
 import com.beandon.backend.pojo.blog.PreviewData;
 import com.beandon.backend.services.BlogService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,7 +46,7 @@ public class BlogController {
     }
 
     @PostMapping("/posts/save")
-    public S3Content saveText(@RequestParam("file") MultipartFile multipartFile, @RequestParam("name") String fileName) {
+    public S3Content saveText(@RequestParam("file") @NonNull MultipartFile multipartFile, @RequestParam("name") @NonNull String fileName) {
         URL url = blogService.savePost(multipartFile, fileName);
         return S3Content.builder()
                 .url(url.toString())

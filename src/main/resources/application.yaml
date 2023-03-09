@@ -3,6 +3,9 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+server:
+  error:
+    includeMessage: always
 aws:
   region: us-west-2
   rds:
@@ -14,8 +17,6 @@ access:
   key:
     id: ${AWS_ACCESS_KEY_ID}
     secret: ${AWS_SECRET_ACCESS_KEY}
-auth:
-  password: "{noop}${API_PASSWORD}"
 logging:
   level:
     org.springframework.web: INFO

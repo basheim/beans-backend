@@ -6,10 +6,12 @@ import com.beandon.backend.pojo.blog.PreviewData;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
 import java.io.ByteArrayInputStream;
@@ -50,22 +52,25 @@ public class BlogService {
     public PostPageData getCompletePost(String id) {
         PostData mainPost =
                 jdbcTemplate.queryForObject(
-                    String.format("SELECT * FROM posts " +
-                            "WHERE id='%s';", id),
-                    new BeanPropertyRowMapper<>(PostData.class));
+                    "SELECT * FROM posts WHERE id=?;",
+                        new BeanPropertyRowMapper<>(PostData.class),
+                        id);
         if (mainPost == null) {
-            throw new IllegalStateException("Main post not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Post id could not be found.");
         }
 
         String data = fileService.getText(S3_BUCKET_NAME, mainPost.getContent());
 
         List<PreviewData> previewData =
                 jdbcTemplate.query(
-                        String.format("SELECT id, title, description, createdDate, tags FROM posts " +
+                        "SELECT id, title, description, createdDate, tags FROM posts " +
                                 "WHERE (%s) " +
                                 "AND NOT id='%s' " +
-                                "LIMIT %d;", getContainsString(mainPost.getTags(), "tags"), mainPost.getId(), PREVIEW_LIMIT),
-                        new BeanPropertyRowMapper<>(PreviewData.class));
+                                "LIMIT %d;",
+                        new BeanPropertyRowMapper<>(PreviewData.class),
+                        getContainsString(mainPost.getTags(), "tags"),
+                        mainPost.getId(),
+                        PREVIEW_LIMIT);
         return PostPageData.builder()
                 .post(mainPost)
                 .previews(previewData)
@@ -104,9 +109,9 @@ public class BlogService {
     }
 
     public void deletePost(String id) {
-        jdbcTemplate.update(String.format("DELETE FROM posts " +
-                "WHERE id='%s' " +
-                "LIMIT 1;", id));
+        jdbcTemplate.update("DELETE FROM posts " +
+                "WHERE id=? " +
+                "LIMIT 1;", id);
     }
 
     public void deleteAllPosts() {
@@ -119,7 +124,7 @@ public class BlogService {
             String html = htmlRenderer.render(document);
             return fileService.save(new ByteArrayInputStream(html.getBytes(StandardCharsets.UTF_8)), S3_BUCKET_NAME, fileName);
         } catch(IOException e) {
-            throw new IllegalStateException("File can not be converted to html.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "File can not be converted to html.");
         }
     }
 }

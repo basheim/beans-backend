@@ -3,8 +3,8 @@ Setup EC2
 * sudo yum update -y
 * sudo amazon-linux-extras install docker
 * sudo service docker start
-* sudo usermod -a -G docker ec2-user
-* sudo setfacl --modify user:ec2-user:rw /var/run/docker.sock
+* sudo usermod -a -G docker ec2-userData
+* sudo setfacl --modify userData:ec2-userData:rw /var/run/docker.sock
 * sudo yum install git
 * sudo yum install jq
 * aws configure with ec2/linuxuser account

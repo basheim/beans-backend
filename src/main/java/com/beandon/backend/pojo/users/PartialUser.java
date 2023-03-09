@@ -1,18 +1,18 @@
-package com.beandon.backend.pojo.project;
+package com.beandon.backend.pojo.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
 @Data
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PartialProjectData {
+public class PartialUser {
     @NonNull
-    private String name;
+    private String username;
     @NonNull
-    private Integer progress;
+    private String password;
     @NonNull
-    private String state;
-    @NonNull
-    private String link;
+    private String role;
 }

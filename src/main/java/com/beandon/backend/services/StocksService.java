@@ -32,20 +32,23 @@ public class StocksService {
 
     public List<TransactionData> getAllTransactions(Timestamp date) {
         return jdbcTemplate.query(
-                String.format("SELECT * FROM stock_transactions " +
-                        "WHERE date > '%s' ORDER BY date DESC;", date.toString()),
-                new BeanPropertyRowMapper<>(TransactionData.class));
+                "SELECT * FROM stock_transactions " +
+                        "WHERE date > '%s' ORDER BY date DESC;",
+                new BeanPropertyRowMapper<>(TransactionData.class),
+                date.toString());
     }
 
     public AccountOverview getAccountOverview() {
         AccountData initial = jdbcTemplate.queryForObject(
-                String.format("SELECT * FROM account_status " +
-                                "WHERE id='%s';", INITIAL_ACCOUNT),
-                new BeanPropertyRowMapper<>(AccountData.class));
+                "SELECT * FROM account_status " +
+                        "WHERE id='%s';",
+                new BeanPropertyRowMapper<>(AccountData.class),
+                INITIAL_ACCOUNT);
         AccountData current = jdbcTemplate.queryForObject(
-                String.format("SELECT * FROM account_status " +
-                        "WHERE id='%s';", CURRENT_ACCOUNT),
-                new BeanPropertyRowMapper<>(AccountData.class));
+                "SELECT * FROM account_status " +
+                        "WHERE id='%s';",
+                new BeanPropertyRowMapper<>(AccountData.class),
+                CURRENT_ACCOUNT);
         return AccountOverview.builder()
                 .amount(current.getAmount())
                 .percentChange(((current.getAmount() - initial.getAmount()) / initial.getAmount()) * 100)

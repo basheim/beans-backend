@@ -5,6 +5,7 @@ import com.beandon.backend.pojo.foragele.CompletePlantData;
 import com.beandon.backend.pojo.foragele.PlantLatestDate;
 import com.beandon.backend.services.FileService;
 import com.beandon.backend.services.ForageleService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,7 +50,7 @@ public class ForageleController {
     }
 
     @PostMapping("/plants/image/save")
-    public S3Content saveImage(@RequestParam("file") MultipartFile multipartFile, @RequestParam("name") String fileName) {
+    public S3Content saveImage(@RequestParam("file") @NonNull MultipartFile multipartFile, @RequestParam("name") @NonNull String fileName) {
         URL url = fileService.save(fileService.multiPartFileToStream(multipartFile), S3_BUCKET_NAME, fileName);
         return S3Content.builder()
                 .url(url.toString())
@@ -57,7 +58,7 @@ public class ForageleController {
     }
 
     @PostMapping("/plants/raw/image/save")
-    public S3Content saveRawImage(@RequestParam("file") MultipartFile multipartFile, @RequestParam("name") String fileName) {
+    public S3Content saveRawImage(@RequestParam("file") @NonNull MultipartFile multipartFile, @RequestParam("name") @NonNull String fileName) {
         URL url = fileService.save(fileService.multiPartFileToStream(multipartFile), RAW_S3_BUCKET_NAME, fileName);
         return S3Content.builder()
                 .url(url.toString())
