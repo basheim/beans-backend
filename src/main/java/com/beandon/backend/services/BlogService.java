@@ -18,7 +18,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -52,7 +55,7 @@ public class BlogService {
     public PostPageData getCompletePost(String id) {
         PostData mainPost =
                 jdbcTemplate.queryForObject(
-                    "SELECT * FROM posts WHERE id=?;",
+                        "SELECT * FROM posts WHERE id=?;",
                         new BeanPropertyRowMapper<>(PostData.class),
                         id);
         if (mainPost == null) {
@@ -60,17 +63,19 @@ public class BlogService {
         }
 
         String data = fileService.getText(S3_BUCKET_NAME, mainPost.getContent());
+        List<Object> parameters = mainPost.getTags().stream().map(s -> "%" + s + "%").collect(Collectors.toList());
+        parameters.add(mainPost.getId());
+        parameters.add(PREVIEW_LIMIT);
 
         List<PreviewData> previewData =
                 jdbcTemplate.query(
                         "SELECT id, title, description, createdDate, tags FROM posts " +
-                                "WHERE (%s) " +
-                                "AND NOT id='%s' " +
-                                "LIMIT %d;",
+                                "WHERE " +
+                                getLikeQuery(mainPost.getTags().size()) +
+                                "AND NOT id=? " +
+                                "LIMIT ?;",
                         new BeanPropertyRowMapper<>(PreviewData.class),
-                        getContainsString(mainPost.getTags(), "tags"),
-                        mainPost.getId(),
-                        PREVIEW_LIMIT);
+                        parameters.toArray());
         return PostPageData.builder()
                 .post(mainPost)
                 .previews(previewData)
@@ -78,18 +83,16 @@ public class BlogService {
                 .build();
     }
 
-    private String getContainsString(List<String> tags, String column) {
+    private String getLikeQuery(int tagCount) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < tags.size(); i++) {
-            if (i != 0) {
+        sb.append("(");
+        for (int i = 0; i < tagCount; i++) {
+            sb.append("tags LIKE ? ");
+            if (i < tagCount - 1) {
                 sb.append("OR ");
             }
-            sb.append(column);
-            sb.append(" ");
-            sb.append("LIKE '%");
-            sb.append(tags.get(i));
-            sb.append("%' ");
         }
+        sb.append(")");
         return sb.toString();
     }
 

@@ -2,14 +2,15 @@ package com.beandon.backend.pojo.blog;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PostData {
     @NonNull
@@ -24,7 +25,6 @@ public class PostData {
     private String content;
     @NonNull
     private String author;
-    @NonNull
     private List<String> tags;
     private String prev;
     private String next;
