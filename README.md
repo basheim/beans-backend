@@ -1,20 +1,25 @@
-Setup EC2
+# Beans Backend
 
-* sudo yum update -y
-* sudo amazon-linux-extras install docker
-* sudo service docker start
-* sudo usermod -a -G docker ec2-userData
-* sudo setfacl --modify userData:ec2-userData:rw /var/run/docker.sock
-* sudo yum install git
-* sudo yum install jq
-* aws configure with ec2/linuxuser account
+## Summary
+A basic Spring service that manages all plant, stock, blog, and project data.
 
-Setup git ssh
-* ssh-keygen -t ed25519 -C "brandonasheim@gmail.com"
-* eval "$(ssh-agent -s)"
-* ssh-add ~/.ssh/id_ed25519
-* cat ~/.ssh/id_ed25519.pub
+## Operation
+The service is managed on EC2 using the shared [Release Scripts](https://github.com/basheim/release-scripts) with the
+-b identifier.
 
-Clone git repo
-* git clone
-* 
+To build and push a new image, run `sh ./scripts/image_build.sh`.
+
+### Local Run
+
+Environment Variables Required:
+* DB_USER
+* DB_PASSWORD
+* DB_HOST
+* DB_PORT
+* DB_NAME
+* AWS_ACCESS_KEY_ID
+* AWS_SECRET_ACCESS_KEY
+
+Command line: run `./gradlew bootRun`
+
+Better to set up an intellij gradle configuration to do the same thing with debugging.
