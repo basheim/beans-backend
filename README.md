@@ -18,7 +18,11 @@ Environment Variables Required:
 * DB_PORT
 * DB_NAME
 * AWS_ACCESS_KEY_ID
-* AWS_SECRET_ACCESS_KEY
+* AWS_SECRET_ACCESS_KEY 
+* JWT_PUBLIC_PATH
+* JWT_PRIVATE_PATH
+* JWT_PUB_KEY
+* JWT_PRI_KEY
 
 Command line: run `./gradlew bootRun`
 

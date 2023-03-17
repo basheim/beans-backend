@@ -8,6 +8,7 @@ FROM openjdk:17-jdk-alpine
 RUN mkdir /app
 
 COPY --from=build /home/gradle/src/build/libs/*.jar /app/spring-boot-application.jar
+COPY scripts/run-application.sh /app/run-application.sh
 
 RUN addgroup usergroup
 RUN adduser --no-create-home --disabled-password --ingroup usergroup appuser
@@ -16,4 +17,4 @@ USER appuser
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","/app/spring-boot-application.jar"]
+ENTRYPOINT ["sh", "/app/run-application.sh"]
